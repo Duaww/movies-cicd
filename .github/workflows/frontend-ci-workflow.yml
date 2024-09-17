@@ -68,9 +68,6 @@ jobs:
       run:
         working-directory: starter/frontend
     steps:
-      - name: check current folder
-        run: pwd
-
       - name: build docker file
         run: docker build -t movies-cicd-image .
     
