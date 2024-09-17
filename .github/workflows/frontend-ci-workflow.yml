@@ -64,10 +64,13 @@ jobs:
   build-docker-file-for-fe:
     needs: [build-and-test-eslint, build-and-test-react-script]
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: starter/frontend
     steps:
       - name: check current folder
         run: pwd
 
       - name: build docker file
-        run: docker build -t movies-cicd-image /starter/frontend
+        run: docker build -t movies-cicd-image .
     
