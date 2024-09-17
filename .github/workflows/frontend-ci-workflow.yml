@@ -65,6 +65,9 @@ jobs:
     needs: [build-and-test-eslint, build-and-test-react-script]
     runs-on: ubuntu-latest
     steps:
+      - name: check current folder
+        run: pwd
+
       - name: build docker file
         run: docker build -t movies-cicd-image /starter/frontend
     
