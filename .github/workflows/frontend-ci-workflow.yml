@@ -66,5 +66,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: build docker file
-        run: docker build -t movies-cicd-image ../starter/frontend
+        run: docker build -t movies-cicd-image /starter/frontend
     
