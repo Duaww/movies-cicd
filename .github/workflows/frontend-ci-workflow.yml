@@ -21,7 +21,7 @@ jobs:
     # Only when code in the frontend application changes
     defaults:
       run:
-        working-directory: ../starter/frontend
+        working-directory: starter/frontend
     
     steps:
       - name: Checkout code
@@ -41,7 +41,7 @@ jobs:
     # Only when code in the frontend application changes
     defaults:
       run:
-        working-directory: ../starter/frontend
+        working-directory: starter/frontend
     
     steps:
       - name: Checkout code
