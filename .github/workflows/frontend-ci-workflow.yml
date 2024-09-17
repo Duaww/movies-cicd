@@ -36,7 +36,7 @@ jobs:
         run: npm i
       
       - name: Run test eslint
-        run: npm run lint
+        run: npm run lint -- --fix
 
   build-and-test-react-script:
     runs-on: ubuntu-latest
@@ -59,7 +59,7 @@ jobs:
         run: npm i
       
       - name: Run test
-        run: npm run lint -- --fix
+        run: npm test
 
   build-docker-file-for-fe:
     needs: [build-and-test-eslint, build-and-test-react-script]
