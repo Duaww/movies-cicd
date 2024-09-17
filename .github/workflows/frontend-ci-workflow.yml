@@ -31,6 +31,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: latest
+
+      - name: install dependency
+        run: npm i
       
       - name: Run test eslint
         run: npm run lint
@@ -51,6 +54,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: latest
+
+      - name: install dependency
+        run: npm i
       
       - name: Run test
         run: npm test
