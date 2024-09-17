@@ -4,6 +4,10 @@ on:
   # Manual trigger using the workflow_dispatch event
   workflow_dispatch:
 
+  push:
+    branches:
+        - main
+
   # Automatic trigger on pull request events targeting the main branch
   pull_request:
     branches:
