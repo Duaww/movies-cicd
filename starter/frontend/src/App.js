@@ -1,9 +1,10 @@
+import React from 'react';
 import './App.css';
 
 export default function App() {
   return (
     <div className="container">
-      movies cicd project
+      <h1>Movie List</h1>
     </div>
   );
 }
