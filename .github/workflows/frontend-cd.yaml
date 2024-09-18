@@ -77,7 +77,7 @@ jobs:
       
       - name: Setup Environment
         run: |  
-          echo "LAST_COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> ${GITHUB_ENV}  
+          echo "LAST_COMMIT_SHA=${GITHUB_SHA}" >> ${GITHUB_ENV}
 
       - name: docker tag with git sha
         run: docker tag movies-cicd-image:latest movies-cicd-image:${GITHUB_ENV}
