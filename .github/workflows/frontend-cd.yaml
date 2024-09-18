@@ -40,6 +40,7 @@ jobs:
         run: npm run lint -- --fix
 
   build-and-test-react-script:
+    needs: [build-and-test-eslint]
     runs-on: ubuntu-latest
 
     # Only when code in the frontend application changes
@@ -63,7 +64,7 @@ jobs:
         run: npm test
 
   build-docker-file-for-fe:
-    needs: [build-and-test-eslint, build-and-test-react-script]
+    needs: [build-and-test-react-script]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -73,12 +74,11 @@ jobs:
         uses: actions/checkout@v3
       
       - name: build docker file
-        run: docker build -t movies-cicd-image .
+        run: docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 -t movies-cicd-image .
       
       - name: Setup Environment
-        run: |  
-          echo "LAST_COMMIT_SHA=${GITHUB_SHA}" >> ${GITHUB_ENV}
+        run: echo ${GITHUB_SHA::7}
 
       - name: docker tag with git sha
-        run: docker tag movies-cicd-image:latest movies-cicd-image:${GITHUB_ENV}
+        run: docker tag movies-cicd-image:latest movies-cicd-image:${GITHUB_SHA::7}
     
