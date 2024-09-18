@@ -5,13 +5,14 @@ on:
   workflow_dispatch:
 
   push:
-    branches:
-        - main
+    branches: ['main']
+    paths: ['starter/frontend']
+        
 
   # Automatic trigger on pull request events targeting the main branch
   pull_request:
-    branches:
-      - main
+    branches: ['main']
+    paths: ['starter/frontend']
 
 # Jobs defined in the workflow
 jobs:
