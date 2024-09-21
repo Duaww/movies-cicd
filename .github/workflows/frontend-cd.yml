@@ -19,7 +19,7 @@ env:
 
 # Jobs defined in the workflow
 jobs:
-  build-and-test-eslint:
+  lint:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -39,7 +39,7 @@ jobs:
       - name: Run test eslint
         run: npm run lint -- --fix
 
-  build-and-test-react-script:
+  test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -60,7 +60,7 @@ jobs:
 
   build:
     name: Build and Push Docker image to Amazon ECR
-    needs: [build-and-test-eslint, build-and-test-react-script]
+    needs: [lint, test]
     runs-on: ubuntu-latest
     defaults:
       run:
