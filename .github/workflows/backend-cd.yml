@@ -1,4 +1,4 @@
-name: Backend CI Workflow
+name: Backend CD Workflow
 
 on:
   # Manual trigger using the workflow_dispatch event
@@ -81,6 +81,7 @@ jobs:
           pipenv run test
 
   build:
+    name: Build and Push Docker image to Amazon ECR
     needs: [lint, test]
     runs-on: ubuntu-latest
     defaults:
@@ -122,8 +123,12 @@ jobs:
           REPOSITORY: movie-backend
           IMAGE_TAG: latest
         run: |
+          echo "Registry: $REGISTRY"
+          echo "Repository: $REPOSITORY"
+          echo "Image Tag: $IMAGE_TAG"
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker images
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: Cache Docker image
         uses: actions/cache@v3
@@ -132,3 +137,44 @@ jobs:
           key: docker-${{ github.sha }}-backend
           restore-keys: |
             docker-${{ github.sha }}-
+  
+  deploy:
+    name: Deploy to EKS
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: "true"
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSER_NAME }}
+
+      - name: Setup teraform
+        run:  |
+          ./init.sh || true
+        working-directory: setup/
+
+      - name: Set Docker image in Kustomize
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: movie-backend
+          IMAGE_TAG: latest
+        run: kustomize edit set image backend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+        working-directory: starter/backend/k8s
+
+      - name: Apply Kubernetes resources
+        run: kustomize build | kubectl apply -f -
+        working-directory: starter/backend/k8s
