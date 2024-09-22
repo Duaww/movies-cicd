@@ -4,14 +4,11 @@ on:
   # Manual trigger using the workflow_dispatch event
   workflow_dispatch:
 
+  # Automatic trigger on push request events targeting the main branch
   push:
     branches: ['main']
     paths: "backend/**"
-        
-  # Automatic trigger on pull request events targeting the main branch
-  pull_request:
-    branches: ['main']
-    paths: "backend/**"
+
 
 env:
   PYTHON_VERSION: 3.11

@@ -3,10 +3,6 @@ name: Backend CI Workflow
 on:
   # Manual trigger using the workflow_dispatch event
   workflow_dispatch:
-
-  push:
-    branches: ['main']
-    paths: "backend/**"
         
   # Automatic trigger on pull request events targeting the main branch
   pull_request:
